@@ -738,6 +738,7 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 		if not ignore_fields[name] then
 			local ok, err, errno = self.connection:write_header(name, value, 0)
 			if not ok then
+				dbg()
 				return nil, err, errno
 			end
 		elseif name == ":authority" then
@@ -746,6 +747,7 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 				-- otherwise it's the Host header
 				local ok, err, errno = self.connection:write_header("host", value, 0)
 				if not ok then
+					dbg()
 					return nil, err, errno
 				end
 			end
@@ -781,11 +783,13 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 		value = table.concat(value, ",")
 		local ok, err, errno = self.connection:write_header("transfer-encoding", value, 0)
 		if not ok then
+			dbg()
 			return nil, err, errno
 		end
 	elseif cl then
 		local ok, err, errno = self.connection:write_header("content-length", cl, 0)
 		if not ok then
+			dbg()
 			return nil, err, errno
 		end
 	end
@@ -793,6 +797,7 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 		local value = table.concat(connection_header, ",")
 		local ok, err, errno = self.connection:write_header("connection", value, 0)
 		if not ok then
+			dbg()
 			return nil, err, errno
 		end
 	end
@@ -800,6 +805,7 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 	do
 		local ok, err, errno = self.connection:write_headers_done(deadline and (deadline-monotime()))
 		if not ok then
+			dbg()
 			return nil, err, errno
 		end
 	end
@@ -814,6 +820,7 @@ function stream_methods:write_headers(headers, end_stream, timeout)
 		else
 			local ok, err, errno = self:write_chunk("", true)
 			if not ok then
+				dbg()
 				return nil, err, errno
 			end
 		end
